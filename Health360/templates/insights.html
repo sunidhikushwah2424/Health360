@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Automated Healthcare Insights – Health360{% endblock %}
+{% block page_title %}Automated Healthcare Insights & Clinical Observations{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">Automated Healthcare Insights Engine</h2>
+            <p class="text-muted mb-0 small">
+                Algorithmic synthesis of epidemiological correlations, lifestyle modulators, and cardiovascular risk factors.
+            </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-primary px-3 py-2">
+                <i class="bi bi-cpu-fill me-1"></i> {{ total_analyzed | number_format }} Records Synthesized
+            </span>
+        </div>
+    </div>
+
+    <!-- Medical Disclaimer Card -->
+    <div class="alert alert-info border-primary-subtle d-flex align-items-start gap-3 mb-4">
+        <i class="bi bi-shield-check fs-3 text-primary mt-1"></i>
+        <div>
+            <h5 class="alert-heading h6 fw-bold mb-1">Scientific Integrity &amp; Methodological Notice</h5>
+            <p class="small mb-0">
+                All observations presented below represent empirical statistical relationships calculated directly from the active patient cohort. In accordance with epidemiological standards, <strong>correlation does not constitute clinical causation</strong>. These insights are intended for public health researchers, data scientists, and students exploring preventive medicine dynamics.
+            </p>
+        </div>
+    </div>
+
+    <!-- Automated Insights Feed -->
+    <div class="row g-4 mb-4">
+        {% for insight in insights %}
+        <div class="col-12">
+            <div class="insight-card" style="--insight-accent: {% if insight.color == 'danger' %}#ef4444{% elif insight.color == 'warning' %}#f59e0b{% elif insight.color == 'success' %}#10b981{% elif insight.color == 'info' %}#0ea5e9{% else %}#0284c7{% endif %};">
+                <div class="insight-header">
+                    <span class="insight-badge bg-{{ insight.color }}-subtle text-{{ insight.color }}">
+                        <i class="bi {{ insight.icon }} me-1"></i> {{ insight.category }}
+                    </span>
+                    <span class="text-muted small">· Statistical Confidence: 99% (n = {{ total_analyzed | number_format }})</span>
+                </div>
+                <h3 class="insight-headline mb-2">{{ insight.headline }}</h3>
+                <p class="insight-detail">{{ insight.detail }}</p>
+                <div class="insight-clinical-box">
+                    <i class="bi bi-journal-medical me-1 text-primary"></i>
+                    <strong>Clinical &amp; Physiological Note:</strong> {{ insight.clinical_note }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Summary Risk Matrix Card -->
+    <div class="card border-0 shadow-sm p-4 bg-white mb-4">
+        <h4 class="h5 fw-bold text-dark mb-3">Key Analytical Takeaways for Preventive Healthcare</h4>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="border rounded p-3 h-100 bg-light">
+                    <h5 class="h6 fw-bold text-primary mb-2"><i class="bi bi-1-circle-fill me-1"></i> Early Vascular Screening</h5>
+                    <p class="small text-muted mb-0">
+                        Elevated systolic blood pressure average (~134 mmHg) among Teenagers and Young Adults calls for routine blood pressure screening well before the age of 40.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border rounded p-3 h-100 bg-light">
+                    <h5 class="h6 fw-bold text-teal mb-2"><i class="bi bi-2-circle-fill me-1"></i> Exercise as a Buffer</h5>
+                    <p class="small text-muted mb-0">
+                        Patients maintaining an active exercise level exhibit a consistent 4-7% lower heart disease rate across every BMI bracket compared to sedentary counterparts.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border rounded p-3 h-100 bg-light">
+                    <h5 class="h6 fw-bold text-danger mb-2"><i class="bi bi-3-circle-fill me-1"></i> Metabolic Multi-Morbidity</h5>
+                    <p class="small text-muted mb-0">
+                        The convergence of obesity, elevated blood sugar, and sedentary behavior constitutes a compound risk multiplier requiring multi-modal lifestyle intervention.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block title %}Smart Healthcare Analytics: Patient Risk & Lifestyle Insights – Data Story{% endblock %}
+{% block page_title %}Tableau Data Story: Patient Risk & Lifestyle Insights{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">Smart Healthcare Analytics: Patient Risk &amp; Lifestyle Insights</h2>
+            <p class="text-muted mb-0 small">
+                Tableau-style guided narrative presentation exploring demographic distribution, chronic conditions, and behavioral intervention.
+            </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-secondary-subtle text-secondary px-3 py-2 border">
+                <i class="bi bi-collection-play me-1"></i> 5 Story Scenes
+            </span>
+            <a href="{{ url_for('tableau_hub') }}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-easel2 me-1"></i> Tableau Desktop Guide
+            </a>
+        </div>
+    </div>
+
+    <!-- TABLEAU STORY HEADER TABS (Matching PDF Page 23, 25, 53) -->
+    <div class="card border-0 shadow-sm p-3 mb-4 bg-white">
+        <div class="story-header-nav" id="storyTabs">
+            <button class="story-tab-btn active" onclick="switchScene(1)">
+                <i class="bi bi-1-circle me-1"></i> Patient Distribution by Age Group
+            </button>
+            <button class="story-tab-btn" onclick="switchScene(2)">
+                <i class="bi bi-2-circle me-1"></i> Fatigue Condition by Age
+            </button>
+            <button class="story-tab-btn" onclick="switchScene(3)">
+                <i class="bi bi-3-circle me-1"></i> Exercise Level Distribution
+            </button>
+            <button class="story-tab-btn" onclick="switchScene(4)">
+                <i class="bi bi-4-circle me-1"></i> Blood Pressure Across Age Groups
+            </button>
+            <button class="story-tab-btn" onclick="switchScene(5)">
+                <i class="bi bi-5-circle me-1"></i> Heart Disease, BMI &amp; Exercise
+            </button>
+        </div>
+
+        <!-- STORY STAGE CONTAINER -->
+        <div class="story-stage position-relative mt-2">
+            
+            <!-- SCENE 1: Patient Distribution by Age Group -->
+            <div id="scene-1" class="story-scene active">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-8">
+                        <div class="bg-white p-3 rounded shadow-sm border">
+                            <div id="story-chart-1" style="width: 100%; height: 420px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm p-4 bg-white">
+                            <div class="badge bg-primary-subtle text-primary mb-2 align-self-start">Scene 1 of 5 · Demographic Baseline</div>
+                            <h4 class="h5 fw-bold text-dark mb-3">Understanding Cohort Demographics</h4>
+                            <p class="small text-muted mb-3">
+                                The foundation of our analysis rests on 5,000 patient records distributed across six distinct life stages. Teenagers and young adults comprise <strong>36.3%</strong> of the surveyed population, providing critical insight into early prevention opportunities.
+                            </p>
+                            <div class="p-3 bg-light rounded small text-secondary">
+                                <strong>Analytical Focus:</strong> Establishes unbiased age representation before examining condition prevalence in subsequent scenes.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCENE 2: Fatigue Condition by Age -->
+            <div id="scene-2" class="story-scene d-none">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-8">
+                        <div class="bg-white p-3 rounded shadow-sm border">
+                            <div id="story-chart-2" style="width: 100%; height: 420px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm p-4 bg-white">
+                            <div class="badge bg-info-subtle text-info mb-2 align-self-start">Scene 2 of 5 · Symptomatic Burden</div>
+                            <h4 class="h5 fw-bold text-dark mb-3">Fatigue as a Universal Clinical Indicator</h4>
+                            <p class="small text-muted mb-3">
+                                Contrary to common assumptions that fatigue is primarily an elderly complaint, reported fatigue remains remarkably steady (~400 to 440 cases) across all age tiers from teenagers to seniors.
+                            </p>
+                            <div class="p-3 bg-light rounded small text-secondary">
+                                <strong>Clinical Note:</strong> Cross-tabulation links persistent fatigue strongly to sedentary behavior and early metabolic dysregulation.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCENE 3: Exercise Level Distribution -->
+            <div id="scene-3" class="story-scene d-none">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-8">
+                        <div class="bg-white p-3 rounded shadow-sm border">
+                            <div id="story-chart-3" style="width: 100%; height: 420px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm p-4 bg-white">
+                            <div class="badge bg-success-subtle text-success mb-2 align-self-start">Scene 3 of 5 · Modifiable Lifestyle</div>
+                            <h4 class="h5 fw-bold text-dark mb-3">Physical Inactivity vs Active Habits</h4>
+                            <p class="small text-muted mb-3">
+                                Physical activity levels are evenly segmented between Active (<strong>33.52%</strong>), Moderate (<strong>33.54%</strong>), and Sedentary (<strong>32.94%</strong>). One out of three patients lives an entirely sedentary lifestyle.
+                            </p>
+                            <div class="p-3 bg-light rounded small text-secondary">
+                                <strong>Public Health Implication:</strong> Sedentary lifestyle constitutes the single most accessible target for preventive clinical intervention.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCENE 4: Blood Pressure Across Age Groups -->
+            <div id="scene-4" class="story-scene d-none">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-8">
+                        <div class="bg-white p-3 rounded shadow-sm border">
+                            <div id="story-chart-4" style="width: 100%; height: 420px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm p-4 bg-white">
+                            <div class="badge bg-danger-subtle text-danger mb-2 align-self-start">Scene 4 of 5 · Vascular Assessment</div>
+                            <h4 class="h5 fw-bold text-dark mb-3">The Hypertension Paradox Across Ages</h4>
+                            <p class="small text-muted mb-3">
+                                While the Old cohort records the highest average BP (<strong>135.67 mmHg</strong>), Young Adults (<strong>134.67 mmHg</strong>) and Teenagers (<strong>134.50 mmHg</strong>) sit shockingly close, all averaging in the Stage 1 Hypertension range.
+                            </p>
+                            <div class="p-3 bg-light rounded small text-secondary">
+                                <strong>Takeaway:</strong> High blood pressure is not merely an affliction of the elderly, but a silent epidemic emerging in youth.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCENE 5: Heart Disease, BMI & Exercise Heatmap -->
+            <div id="scene-5" class="story-scene d-none">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-8">
+                        <div class="bg-white p-3 rounded shadow-sm border">
+                            <div id="story-chart-5" style="width: 100%; height: 420px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm p-4 bg-white">
+                            <div class="badge bg-warning-subtle text-warning mb-2 align-self-start">Scene 5 of 5 · Synthesis & Recommendation</div>
+                            <h4 class="h5 fw-bold text-dark mb-3">Compounding Risk &amp; Exercise Shield</h4>
+                            <p class="small text-muted mb-3">
+                                This matrix demonstrates the compounding interaction of body mass and physical exertion. While Obese + Sedentary individuals experience a peak <strong>42.86%</strong> heart disease rate, active exercise consistently reduces cardiovascular morbidity by ~5% across all weight brackets.
+                            </p>
+                            <div class="p-3 bg-light rounded small text-secondary">
+                                <strong>Evidence-Based Policy:</strong> Encouraging moderate to active physical exercise acts as an immediate risk mitigation strategy even before significant weight loss is attained.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STORY NAVIGATION CONTROLS -->
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                <button class="btn btn-sm btn-outline-dark" id="btnPrevScene" onclick="prevScene()" disabled>
+                    <i class="bi bi-chevron-left me-1"></i> Previous Scene
+                </button>
+                <span class="small fw-bold text-muted" id="sceneIndicator">Scene 1 of 5</span>
+                <button class="btn btn-sm btn-primary" id="btnNextScene" onclick="nextScene()">
+                    Next Scene <i class="bi bi-chevron-right ms-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let currentScene = 1;
+    const totalScenes = 5;
+    const storyCharts = {{ chart_json | safe }};
+
+    function renderStoryChart(sceneNum) {
+        const config = { responsive: true, displayModeBar: false };
+        if (sceneNum === 1 && storyCharts.chart_age_pie) {
+            Plotly.react('story-chart-1', storyCharts.chart_age_pie.data, storyCharts.chart_age_pie.layout, config);
+        } else if (sceneNum === 2 && storyCharts.chart_age_fatigue) {
+            Plotly.react('story-chart-2', storyCharts.chart_age_fatigue.data, storyCharts.chart_age_fatigue.layout, config);
+        } else if (sceneNum === 3 && storyCharts.chart_exercise_donut) {
+            Plotly.react('story-chart-3', storyCharts.chart_exercise_donut.data, storyCharts.chart_exercise_donut.layout, config);
+        } else if (sceneNum === 4 && storyCharts.chart_bp_by_age) {
+            Plotly.react('story-chart-4', storyCharts.chart_bp_by_age.data, storyCharts.chart_bp_by_age.layout, config);
+        } else if (sceneNum === 5 && storyCharts.chart_heatmap) {
+            Plotly.react('story-chart-5', storyCharts.chart_heatmap.data, storyCharts.chart_heatmap.layout, config);
+        }
+    }
+
+    function switchScene(num) {
+        currentScene = num;
+        
+        // Hide all scenes
+        for (let i = 1; i <= totalScenes; i++) {
+            const sc = document.getElementById(`scene-${i}`);
+            if (sc) {
+                if (i === num) {
+                    sc.classList.remove('d-none');
+                } else {
+                    sc.classList.add('d-none');
+                }
+            }
+        }
+
+        // Update tab buttons
+        const tabs = document.querySelectorAll('.story-tab-btn');
+        tabs.forEach((tab, idx) => {
+            if (idx + 1 === num) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+
+        // Update indicator & buttons
+        document.getElementById('sceneIndicator').textContent = `Scene ${num} of ${totalScenes}`;
+        document.getElementById('btnPrevScene').disabled = (num === 1);
+        document.getElementById('btnNextScene').disabled = (num === totalScenes);
+
+        // Render current chart
+        setTimeout(() => {
+            renderStoryChart(num);
+        }, 50);
+    }
+
+    function nextScene() {
+        if (currentScene < totalScenes) {
+            switchScene(currentScene + 1);
+        }
+    }
+
+    function prevScene() {
+        if (currentScene > 1) {
+            switchScene(currentScene - 1);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderStoryChart(1);
+    });
+</script>
+{% endblock %}

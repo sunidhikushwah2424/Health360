@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Demographics & Analytics – Health360{% endblock %}
+{% block page_title %}Patient Demographics & Physical Profile{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">Patient Demographics &amp; Analytics</h2>
+            <p class="text-muted mb-0 small">Comprehensive demographic stratification across age, gender, and BMI distributions.</p>
+        </div>
+        <a href="{{ url_for('data_explorer') }}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-table me-1"></i> View Patient Records
+        </a>
+    </div>
+
+    <!-- Summary KPI Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #0284c7;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Cohort Size</span>
+                    <i class="bi bi-people text-primary fs-4"></i>
+                </div>
+                <div class="kpi-value">{{ total_patients | number_format }}</div>
+                <div class="kpi-subtext">Active cohort records</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #0d9488;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Average Age</span>
+                    <i class="bi bi-calendar3 text-teal fs-4"></i>
+                </div>
+                <div class="kpi-value">{{ avg_age }} <span class="fs-6 text-muted">Years</span></div>
+                <div class="kpi-subtext">Range: 18 - 85 years</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #f59e0b;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Gender Ratio</span>
+                    <i class="bi bi-gender-ambiguous text-warning fs-4"></i>
+                </div>
+                <div class="kpi-value">{{ male_pct }}% <span class="fs-6 text-muted">M</span> / {{ female_pct }}% <span class="fs-6 text-muted">F</span></div>
+                <div class="kpi-subtext">Balanced demographic sampling</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #6366f1;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Mean BMI</span>
+                    <i class="bi bi-speedometer text-indigo fs-4"></i>
+                </div>
+                <div class="kpi-value">{{ avg_bmi }} <span class="fs-6 text-muted">kg/m²</span></div>
+                <div class="kpi-subtext">Overweight cohort baseline</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1: Age Distribution & BMI Distribution -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-pie-chart text-primary"></i> Patient Distribution by Age Group</h3>
+                    <span class="chart-card-badge">Demographics</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="demo-age-pie" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-bar-chart text-teal"></i> BMI Category Breakdown</h3>
+                    <span class="chart-card-badge">Anthropometrics</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="demo-bmi-bar" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2: Age vs BMI Scatter & Gender Condition Analysis -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-scatter-chart text-danger"></i> Patient Distribution: Age vs BMI by Health Risk Score</h3>
+                    <span class="chart-card-badge">Composite Bivariate Analysis</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="demo-scatter-risk" style="width: 100%; height: 420px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const demoCharts = {{ chart_json | safe }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const config = { responsive: true, displayModeBar: true, displaylogo: false };
+        if (demoCharts.age_pie) Plotly.react('demo-age-pie', demoCharts.age_pie.data, demoCharts.age_pie.layout, config);
+        if (demoCharts.bmi_bar) Plotly.react('demo-bmi-bar', demoCharts.bmi_bar.data, demoCharts.bmi_bar.layout, config);
+        if (demoCharts.scatter_risk) Plotly.react('demo-scatter-risk', demoCharts.scatter_risk.data, demoCharts.scatter_risk.layout, config);
+    });
+</script>
+{% endblock %}

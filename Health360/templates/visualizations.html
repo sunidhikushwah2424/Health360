@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+
+{% block title %}All 9 Visualizations Gallery – Health360{% endblock %}
+{% block page_title %}9 Required Project Visualizations{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">All 9 Required Visualizations Gallery</h2>
+            <p class="text-muted mb-0 small">
+                Complete catalog of analytical visualizations specified in the Health360 requirements with data tables and interpretations.
+            </p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="#chart-1" class="btn btn-sm btn-outline-secondary">KPI Overview</a>
+            <a href="#chart-2" class="btn btn-sm btn-outline-secondary">BP by Age</a>
+            <a href="#chart-3" class="btn btn-sm btn-outline-secondary">Alcohol &amp; Smoking</a>
+            <a href="#chart-4" class="btn btn-sm btn-outline-secondary">Exercise Donut</a>
+            <a href="#chart-5" class="btn btn-sm btn-outline-secondary">Age Pie</a>
+            <a href="#chart-6" class="btn btn-sm btn-outline-secondary">HD vs Diabetes</a>
+            <a href="#chart-7" class="btn btn-sm btn-outline-secondary">BMI vs HD Rate</a>
+            <a href="#chart-8" class="btn btn-sm btn-outline-secondary">Heat Map</a>
+            <a href="#chart-9" class="btn btn-sm btn-outline-secondary">Fatigue Bar</a>
+        </div>
+    </div>
+
+    <!-- 1. KPI Patient Health & Disease Overview -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-1">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #1</span> KPI – Patient Health &amp; Disease Overview
+            </h4>
+            <span class="badge bg-light text-muted border">Clinical Vitals &amp; Morbidity Totals</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Total Patient Cohort</div>
+                        <div class="fs-2 fw-bold text-dark">{{ kpis.total_patients | number_format }}</div>
+                        <span class="text-success small"><i class="bi bi-shield-check"></i> 100% Ingested</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Heart Disease Diagnoses</div>
+                        <div class="fs-2 fw-bold text-danger">{{ kpis.heart_disease_count | number_format }}</div>
+                        <span class="text-danger small">{{ kpis.heart_disease_pct }}% Cohort Rate</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Diabetes Diagnoses</div>
+                        <div class="fs-2 fw-bold text-warning">{{ kpis.diabetes_count | number_format }}</div>
+                        <span class="text-warning small">{{ kpis.diabetes_pct }}% Cohort Rate</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Stroke History</div>
+                        <div class="fs-2 fw-bold text-primary">{{ kpis.stroke_count | number_format }}</div>
+                        <span class="text-primary small">{{ kpis.stroke_pct }}% Cohort Rate</span>
+                    </div>
+                </div>
+            </div>
+            <div id="vis-kpi-gauges" style="width: 100%; height: 260px;"></div>
+            <div class="bg-light p-3 rounded mt-3 text-muted small">
+                <strong>Analytical Significance:</strong> Establishes the foundational denominator and baseline prevalence parameters across all 5,000 patient records.
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Bar Chart – Average Blood Pressure Across Age Groups -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-2">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #2</span> Bar Chart – Average Blood Pressure Across Age Groups
+            </h4>
+            <span class="badge bg-light text-muted border">Vascular Profile by Life Stage</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-bp-by-age" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Clinical Interpretation</h5>
+                        <p class="small text-muted mb-2">
+                            Average systolic blood pressure hovers between <strong>133.61 mmHg</strong> (Adults) and <strong>135.67 mmHg</strong> (Old age group), demonstrating that elevated arterial tension is prevalent across both young and senior demographics.
+                        </p>
+                        <hr class="my-2">
+                        <div class="small text-secondary">
+                            <strong>Reference Threshold:</strong> 130 mmHg marks the clinical boundary for Stage 1 Hypertension. The entire cohort's average sits above this line.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Grouped Bar Chart – Alcohol and Smoking Consumption Across Age Groups -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-3">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #3</span> Grouped Bar Chart – Alcohol and Smoking Consumption Across Age Groups
+            </h4>
+            <span class="badge bg-light text-muted border">Substance Consumption Patterns</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-alcohol-smoking" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Behavioral Observations</h5>
+                        <p class="small text-muted mb-2">
+                            Alcohol consumption consistently outpaces tobacco smoking in every age bracket. Young Adults and Teenagers exhibit notable rates of social alcohol intake (~38%), while tobacco use maintains steady prevalence across Middle Age and Senior cohorts.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Donut Chart – Exercise Level Distribution -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-4">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #4</span> Donut Chart – Exercise Level Distribution
+            </h4>
+            <span class="badge bg-light text-muted border">Physical Exertion Demographics</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-exercise-donut" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Exertion Profile</h5>
+                        <p class="small text-muted mb-2">
+                            The dataset exhibits a virtually equal tripartite split: Sedentary (<strong>32.94%</strong>), Moderate (<strong>33.54%</strong>), and Active (<strong>33.52%</strong>). This balanced baseline enables unbiased comparison of physical activity's protective effects.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Pie Chart – Patient Distribution by Age Group -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-5">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #5</span> Pie Chart – Patient Distribution by Age Group
+            </h4>
+            <span class="badge bg-light text-muted border">Demographic Cohort Stratification</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-age-pie" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Age Cohort Grouping</h5>
+                        <ul class="list-unstyled small text-muted mb-0">
+                            <li><strong>Teenager (18–30):</strong> ~20.38%</li>
+                            <li><strong>Young Adult (31–40):</strong> ~15.96%</li>
+                            <li><strong>Adult (41–50):</strong> ~16.26%</li>
+                            <li><strong>Middle Age (51–60):</strong> ~16.08%</li>
+                            <li><strong>Senior (61–70):</strong> ~16.38%</li>
+                            <li><strong>Old (&gt;70):</strong> ~14.94%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Grouped Bar Chart – Heart Disease vs Diabetes Prevalence by BMI Category -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-6">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #6</span> Grouped Bar Chart – Heart Disease vs Diabetes Prevalence by BMI Category
+            </h4>
+            <span class="badge bg-light text-muted border">Chronic Condition Comparison</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-hd-vs-diabetes" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Comparative Morbidity</h5>
+                        <p class="small text-muted mb-2">
+                            Both heart disease and diabetes escalate in lockstep as body mass index transitions from normal to overweight and obese, highlighting the mutual metabolic roots of cardiac and glycemic dysregulation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Bar Chart – BMI Category vs Heart Disease Rate -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-7">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #7</span> Bar Chart – BMI Category vs Heart Disease Rate
+            </h4>
+            <span class="badge bg-light text-muted border">Cardiovascular Risk Escalation</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-bmi-hd-rate" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Risk Gradient</h5>
+                        <p class="small text-muted mb-2">
+                            Patients diagnosed with obesity manifest an average heart disease rate of approximately <strong>39.98%</strong>, compared to <strong>32.91%</strong> for overweight, <strong>25.97%</strong> for normal weight, and <strong>20.64%</strong> for underweight patients.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Heat Map – Heart Disease by BMI Category and Exercise Level -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-8">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #8</span> Heat Map – Heart Disease by BMI Category and Exercise Level
+            </h4>
+            <span class="badge bg-light text-muted border">Bivariate Risk Matrix</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-heatmap" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Matrix Insights</h5>
+                        <p class="small text-muted mb-2">
+                            The highest risk cell in the entire matrix corresponds to <strong>Obese + Sedentary</strong> patients (<strong>42.86%</strong> prevalence), whereas active habits mitigate cardiovascular risk across every single BMI tier.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Bar Chart – Age Group Distribution by Fatigue Condition -->
+    <div class="card border-0 shadow-sm mb-4" id="chart-9">
+        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="h6 mb-0 text-dark fw-bold">
+                <span class="badge bg-primary me-2">Chart #9</span> Bar Chart – Age Group Distribution by Fatigue Condition
+            </h4>
+            <span class="badge bg-light text-muted border">Symptomatic Burden Across Life Stages</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div id="vis-age-fatigue" style="width: 100%; height: 380px;"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-3 border rounded bg-light">
+                        <h5 class="h6 fw-bold text-dark mb-2">Symptomatic Distribution</h5>
+                        <p class="small text-muted mb-2">
+                            Fatigue condition displays a remarkably consistent distribution across age tiers, averaging ~400-440 reported cases per age group, underscoring fatigue as a ubiquitous clinical complaint spanning all adult life stages.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const chartsData = {{ chart_json | safe }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const config = { responsive: true, displayModeBar: true, displaylogo: false };
+        if (chartsData.kpi_gauges) Plotly.react('vis-kpi-gauges', chartsData.kpi_gauges.data, chartsData.kpi_gauges.layout, config);
+        if (chartsData.chart_bp_by_age) Plotly.react('vis-bp-by-age', chartsData.chart_bp_by_age.data, chartsData.chart_bp_by_age.layout, config);
+        if (chartsData.chart_alcohol_smoking) Plotly.react('vis-alcohol-smoking', chartsData.chart_alcohol_smoking.data, chartsData.chart_alcohol_smoking.layout, config);
+        if (chartsData.chart_exercise_donut) Plotly.react('vis-exercise-donut', chartsData.chart_exercise_donut.data, chartsData.chart_exercise_donut.layout, config);
+        if (chartsData.chart_age_pie) Plotly.react('vis-age-pie', chartsData.chart_age_pie.data, chartsData.chart_age_pie.layout, config);
+        if (chartsData.chart_hd_vs_diabetes) Plotly.react('vis-hd-vs-diabetes', chartsData.chart_hd_vs_diabetes.data, chartsData.chart_hd_vs_diabetes.layout, config);
+        if (chartsData.chart_bmi_hd_rate) Plotly.react('vis-bmi-hd-rate', chartsData.chart_bmi_hd_rate.data, chartsData.chart_bmi_hd_rate.layout, config);
+        if (chartsData.chart_heatmap) Plotly.react('vis-heatmap', chartsData.chart_heatmap.data, chartsData.chart_heatmap.layout, config);
+        if (chartsData.chart_age_fatigue) Plotly.react('vis-age-fatigue', chartsData.chart_age_fatigue.data, chartsData.chart_age_fatigue.layout, config);
+    });
+</script>
+{% endblock %}

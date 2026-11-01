@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Chronic Disease & Morbidity Analysis – Health360{% endblock %}
+{% block page_title %}Chronic Disease & Morbidity Analysis{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">Chronic Disease &amp; Morbidity Analysis</h2>
+            <p class="text-muted mb-0 small">Cross-sectional analysis of Heart Disease, Type 2 Diabetes, and Cerebrovascular Stroke.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2">
+                <i class="bi bi-heart-pulse-fill me-1"></i> {{ kpis.heart_disease_pct }}% Heart Disease Prevalence
+            </span>
+            <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2">
+                <i class="bi bi-droplet-fill me-1"></i> {{ kpis.diabetes_pct }}% Diabetes Prevalence
+            </span>
+        </div>
+    </div>
+
+    <!-- Disease KPI Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="kpi-card" style="--card-accent: #e11d48;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Heart Disease Diagnoses</span>
+                    <i class="bi bi-heart-pulse text-danger fs-3"></i>
+                </div>
+                <div class="kpi-value text-danger">{{ kpis.heart_disease_count | number_format }}</div>
+                <div class="kpi-subtext">Prevalence: <strong>{{ kpis.heart_disease_pct }}%</strong> of surveyed cohort</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="kpi-card" style="--card-accent: #f59e0b;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Diabetes Diagnoses</span>
+                    <i class="bi bi-droplet-half text-warning fs-3"></i>
+                </div>
+                <div class="kpi-value text-warning">{{ kpis.diabetes_count | number_format }}</div>
+                <div class="kpi-subtext">Prevalence: <strong>{{ kpis.diabetes_pct }}%</strong> of surveyed cohort</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="kpi-card" style="--card-accent: #0284c7;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Stroke History</span>
+                    <i class="bi bi-lightning-charge text-primary fs-3"></i>
+                </div>
+                <div class="kpi-value text-primary">{{ kpis.stroke_count | number_format }}</div>
+                <div class="kpi-subtext">Prevalence: <strong>{{ kpis.stroke_pct }}%</strong> of surveyed cohort</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1: BMI vs HD Rate & HD vs Diabetes Prevalence -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-bar-chart text-danger"></i> BMI Category vs Heart Disease Rate</h3>
+                    <span class="chart-card-badge">Chart #7</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="disease-bmi-hd-rate" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-bar-chart-steps text-warning"></i> Heart Disease vs Diabetes by BMI Category</h3>
+                    <span class="chart-card-badge">Chart #6</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="disease-hd-vs-diabetes" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2: Heatmap & Multi-Morbidity Venn / Distribution -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-grid-3x3-gap-fill text-danger"></i> Heart Disease by BMI Category &amp; Exercise Level</h3>
+                    <span class="chart-card-badge">Chart #8 · Heat Map</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="disease-heatmap" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-pie-chart text-secondary"></i> Co-Morbidity Overlap Distribution</h3>
+                    <span class="chart-card-badge">Disease Clustering</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="disease-comorbidity" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const diseaseCharts = {{ chart_json | safe }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const config = { responsive: true, displayModeBar: true, displaylogo: false };
+        if (diseaseCharts.chart_bmi_hd_rate) Plotly.react('disease-bmi-hd-rate', diseaseCharts.chart_bmi_hd_rate.data, diseaseCharts.chart_bmi_hd_rate.layout, config);
+        if (diseaseCharts.chart_hd_vs_diabetes) Plotly.react('disease-hd-vs-diabetes', diseaseCharts.chart_hd_vs_diabetes.data, diseaseCharts.chart_hd_vs_diabetes.layout, config);
+        if (diseaseCharts.chart_heatmap) Plotly.react('disease-heatmap', diseaseCharts.chart_heatmap.data, diseaseCharts.chart_heatmap.layout, config);
+        if (diseaseCharts.comorbidity) Plotly.react('disease-comorbidity', diseaseCharts.comorbidity.data, diseaseCharts.comorbidity.layout, config);
+    });
+</script>
+{% endblock %}

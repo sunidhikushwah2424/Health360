@@ -1,0 +1,426 @@
+{% extends 'base.html' %}
+
+{% block title %}Smart Healthcare & Risk Factor Analysis Dashboard – Health360{% endblock %}
+{% block page_title %}Smart Healthcare & Risk Factor Analysis Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- PAGE HEADER BANNER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">Smart Healthcare & Risk Factor Analysis Dashboard</h2>
+            <p class="text-muted mb-0 small">
+                Multi-dimensional epidemiological risk assessment across demographic, lifestyle, and clinical factors.
+            </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="true">
+                <i class="bi bi-funnel me-1"></i> Toggle Filters
+            </button>
+            <a href="{{ url_for('story') }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-play-circle-fill me-1"></i> Open Tableau Story
+            </a>
+        </div>
+    </div>
+
+    <!-- INTERACTIVE FILTER CARD -->
+    <div class="collapse show" id="filterCollapse">
+        <div class="filter-card mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-sliders text-primary"></i>
+                    <span class="fw-bold small text-uppercase text-secondary">Interactive Cohort Filters</span>
+                    <span class="badge bg-light text-muted border ms-2">Real-time dynamic filtering</span>
+                </div>
+                <div id="active-filters-container" class="d-flex flex-wrap align-items-center"></div>
+            </div>
+
+            <form id="global-filter-form">
+                <div class="row g-3">
+                    <!-- Age Group -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Age Group</label>
+                        <select name="age_group" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Age Groups</option>
+                            <option value="Teenager">Teenager (18–30)</option>
+                            <option value="Young Adult">Young Adult (31–40)</option>
+                            <option value="Adult">Adult (41–50)</option>
+                            <option value="Middle Age">Middle Age (51–60)</option>
+                            <option value="Senior">Senior (61–70)</option>
+                            <option value="Old">Old (>70)</option>
+                        </select>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Gender</label>
+                        <select name="gender" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Genders</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- BMI Category -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">BMI Category</label>
+                        <select name="bmi_category" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All BMI Ranges</option>
+                            <option value="Underweight">Underweight (&lt;18.5)</option>
+                            <option value="Normal">Normal (18.5–24.9)</option>
+                            <option value="Overweight">Overweight (25–29.9)</option>
+                            <option value="Obese">Obese (&ge;30.0)</option>
+                        </select>
+                    </div>
+
+                    <!-- Exercise Level -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Exercise Level</label>
+                        <select name="exercise_level" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Exercise Levels</option>
+                            <option value="Active">Active</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Sedentary">Sedentary</option>
+                        </select>
+                    </div>
+
+                    <!-- Smoking Habits -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Smoking Habits</label>
+                        <select name="smoking" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Smoking Statuses</option>
+                            <option value="Yes">Smoker</option>
+                            <option value="No">Non-Smoker</option>
+                        </select>
+                    </div>
+
+                    <!-- Alcohol Consumption -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Alcohol Intake</label>
+                        <select name="alcohol" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Alcohol Statuses</option>
+                            <option value="Yes">Alcohol Consumer</option>
+                            <option value="No">Non-Consumer</option>
+                        </select>
+                    </div>
+
+                    <!-- Heart Disease -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Heart Disease</label>
+                        <select name="heart_disease" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Statuses</option>
+                            <option value="Yes">Diagnosed (Yes)</option>
+                            <option value="No">No History (No)</option>
+                        </select>
+                    </div>
+
+                    <!-- Diabetes -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Diabetes</label>
+                        <select name="diabetes" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Statuses</option>
+                            <option value="Yes">Diabetic (Yes)</option>
+                            <option value="No">Non-Diabetic (No)</option>
+                        </select>
+                    </div>
+
+                    <!-- Stroke History -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Stroke History</label>
+                        <select name="stroke" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Statuses</option>
+                            <option value="Yes">History (Yes)</option>
+                            <option value="No">No History (No)</option>
+                        </select>
+                    </div>
+
+                    <!-- Fatigue Condition -->
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <label class="form-label-custom">Fatigue Condition</label>
+                        <select name="fatigue" class="form-select form-select-sm form-select-custom">
+                            <option value="All" selected>All Conditions</option>
+                            <option value="Yes">Fatigue Present</option>
+                            <option value="No">Fatigue Absent</option>
+                        </select>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="col-12 col-md-8 col-lg-4 d-flex align-items-end gap-2">
+                        <button type="submit" class="btn btn-filter-apply w-50">
+                            <i class="bi bi-check2-circle me-1"></i> Apply Filters
+                        </button>
+                        <button type="button" id="btn-reset-filters" class="btn btn-filter-reset w-50">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset All
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DYNAMIC KPI CARDS (6 CARDS OVERVIEW) -->
+    <div class="row g-3 mb-4">
+        <!-- 1. Total Patients -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="kpi-card" style="--card-accent: #0284c7; --icon-bg: #e0f2fe; --icon-color: #0284c7;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Total Patients</span>
+                    <div class="kpi-icon-wrapper"><i class="bi bi-people-fill"></i></div>
+                </div>
+                <div class="kpi-value" id="kpi-total-patients">{{ kpis.total_patients | number_format }}</div>
+                <div class="kpi-subtext">
+                    <i class="bi bi-check-circle-fill text-success"></i> 100% Validated records
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Avg Health Risk Score -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="kpi-card" style="--card-accent: #f43f5e; --icon-bg: #ffe4e6; --icon-color: #f43f5e;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Avg Risk Score</span>
+                    <div class="kpi-icon-wrapper"><i class="bi bi-shield-shaded"></i></div>
+                </div>
+                <div class="kpi-value" id="kpi-avg-risk">{{ kpis.avg_risk_score }}/100</div>
+                <div class="kpi-subtext">
+                    <span class="badge {% if kpis.avg_risk_score > 60 %}bg-danger{% else %}bg-warning text-dark{% endif %} p-1">
+                        Moderate Risk Cohort
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Heart Disease Cases -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="kpi-card" style="--card-accent: #e11d48; --icon-bg: #ffe4e6; --icon-color: #e11d48;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Heart Disease</span>
+                    <div class="kpi-icon-wrapper"><i class="bi bi-heart-pulse-fill"></i></div>
+                </div>
+                <div class="kpi-value" id="kpi-heart-disease">
+                    {{ kpis.heart_disease_count | number_format }}
+                    <span class="badge bg-danger-subtle text-danger ms-1 fs-6">{{ kpis.heart_disease_pct }}%</span>
+                </div>
+                <div class="kpi-subtext">
+                    <i class="bi bi-info-circle"></i> Diagnosed prevalence
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Diabetes Cases -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="kpi-card" style="--card-accent: #f59e0b; --icon-bg: #fef3c7; --icon-color: #f59e0b;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Diabetes Cases</span>
+                    <div class="kpi-icon-wrapper"><i class="bi bi-droplet-half"></i></div>
+                </div>
+                <div class="kpi-value" id="kpi-diabetes">
+                    {{ kpis.diabetes_count | number_format }}
+                    <span class="badge bg-warning-subtle text-warning ms-1 fs-6">{{ kpis.diabetes_pct }}%</span>
+                </div>
+                <div class="kpi-subtext">
+                    <i class="bi bi-activity"></i> Glycemic condition
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Stroke Cases -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="kpi-card" style="--card-accent: #0d9488; --icon-bg: #ccfbf1; --icon-color: #0d9488;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Stroke History</span>
+                    <div class="kpi-icon-wrapper"><i class="bi bi-lightning-charge-fill"></i></div>
+                </div>
+                <div class="kpi-value" id="kpi-stroke">
+                    {{ kpis.stroke_count | number_format }}
+                    <span class="badge bg-info-subtle text-info ms-1 fs-6">{{ kpis.stroke_pct }}%</span>
+                </div>
+                <div class="kpi-subtext">
+                    <i class="bi bi-clock-history"></i> Cerebrovascular event
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Average Blood Pressure & BMI -->
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="kpi-card" style="--card-accent: #6366f1; --icon-bg: #e0e7ff; --icon-color: #6366f1;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Avg BP &amp; BMI</span>
+                    <div class="kpi-icon-wrapper"><i class="bi bi-speedometer2"></i></div>
+                </div>
+                <div class="kpi-value fs-5" id="kpi-avg-bp">{{ kpis.avg_bp }} <small class="text-muted fs-6">mmHg</small></div>
+                <div class="kpi-subtext" id="kpi-avg-bmi">
+                    Avg BMI: <strong>{{ kpis.avg_bmi }} kg/m²</strong> (Overweight)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NINE REQUIRED VISUALIZATIONS GRID (Matching PDF Structure) -->
+    
+    <!-- ROW 1: Charts 4, 2, 3 -->
+    <div class="row g-4 mb-4">
+        <!-- Chart 4: Donut Chart – Exercise Level Distribution -->
+        <div class="col-12 col-lg-4">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-pie-chart text-teal"></i>
+                        Exercise Level Distribution
+                    </h3>
+                    <span class="chart-card-badge">Chart #4 · Donut</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-exercise-donut" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2: Bar Chart – Average Blood Pressure Across Age Groups -->
+        <div class="col-12 col-lg-4">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-bar-chart text-primary"></i>
+                        Average Blood Pressure Across Age Groups
+                    </h3>
+                    <span class="chart-card-badge">Chart #2 · Bar</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-bp-by-age" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 3: Grouped Bar Chart – Alcohol & Smoking Across Age Groups -->
+        <div class="col-12 col-lg-4">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-bar-chart-steps text-warning"></i>
+                        Alcohol &amp; Smoking Consumption
+                    </h3>
+                    <span class="chart-card-badge">Chart #3 · Grouped Bar</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-alcohol-smoking" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROW 2: Charts 7, 6, 5 -->
+    <div class="row g-4 mb-4">
+        <!-- Chart 7: Bar Chart – BMI Category vs Heart Disease Rate -->
+        <div class="col-12 col-lg-4">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-graph-up text-danger"></i>
+                        BMI Category vs Heart Disease Rate
+                    </h3>
+                    <span class="chart-card-badge">Chart #7 · Bar</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-bmi-hd-rate" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 6: Grouped Bar Chart – Heart Disease vs Diabetes Prevalence by BMI -->
+        <div class="col-12 col-lg-4">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-intersect text-indigo"></i>
+                        Heart Disease vs Diabetes Prevalence
+                    </h3>
+                    <span class="chart-card-badge">Chart #6 · Grouped Bar</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-hd-vs-diabetes" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 5: Pie Chart – Patient Distribution by Age Group -->
+        <div class="col-12 col-lg-4">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-pie-chart-fill text-secondary"></i>
+                        Patient Distribution by Age Group
+                    </h3>
+                    <span class="chart-card-badge">Chart #5 · Pie</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-age-pie" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROW 3: Charts 8 & 9 -->
+    <div class="row g-4 mb-4">
+        <!-- Chart 8: Heat Map – Heart Disease by BMI Category and Exercise Level -->
+        <div class="col-12 col-lg-7">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-grid-3x3-gap-fill text-danger"></i>
+                        Heart Disease Prevalence by BMI Category &amp; Exercise Level
+                    </h3>
+                    <span class="chart-card-badge">Chart #8 · Matrix Heatmap</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-heatmap" style="width: 100%; height: 360px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 9: Bar Chart – Age Group Distribution by Fatigue Condition -->
+        <div class="col-12 col-lg-5">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title">
+                        <i class="bi bi-battery-charging text-primary"></i>
+                        Age Group by Fatigue Condition
+                    </h3>
+                    <span class="chart-card-badge">Chart #9 · Horizontal Stack</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="container-age-fatigue" style="width: 100%; height: 360px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK CLINICAL INSIGHTS BANNER -->
+    <div class="card border-0 shadow-sm p-3 mb-4 bg-white" style="border-left: 4px solid var(--primary) !important;">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <h4 class="h6 mb-0 text-dark fw-bold d-flex align-items-center gap-2">
+                <i class="bi bi-lightbulb-fill text-warning"></i>
+                Automated Analytical Observations
+            </h4>
+            <a href="{{ url_for('insights') }}" class="btn btn-sm btn-outline-primary">
+                View Full Narrative Report <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <p id="quick-insight-banner" class="text-muted small mb-0">
+            Analysis indicates that patients in the Obese category experiencing a sedentary lifestyle encounter the highest heart disease risk (~42.9%), whereas active physical routines correlate with markedly lower cardiac and metabolic prevalence across all age cohorts.
+        </p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Initial Plotly charts rendering with server-injected JSON payloads
+    const initialCharts = {{ initial_chart_json | safe }};
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCharts(initialCharts);
+    });
+</script>
+{% endblock %}

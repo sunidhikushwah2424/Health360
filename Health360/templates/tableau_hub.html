@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau Integration Hub & Guide – Health360{% endblock %}
+{% block page_title %}Tableau Integration & Publishing Hub{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">Tableau Desktop &amp; Tableau Public Integration Hub</h2>
+            <p class="text-muted mb-0 small">
+                End-to-end guidance for importing the cleaned Health360 dataset, building 4 dashboards, constructing the 5-scene story, and publishing.
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('export_tableau_dataset') }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-download me-1"></i> Download Tableau-Ready CSV
+            </a>
+        </div>
+    </div>
+
+    <!-- Live Tableau Public Embedding / Preview Section -->
+    <div class="card border-0 shadow-sm p-4 bg-white mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="h5 fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-window-fullscreen text-primary"></i>
+                Tableau Dashboard &amp; Story Live Embed Viewer
+            </h4>
+            <span class="badge bg-light text-muted border">Web Integration Active</span>
+        </div>
+        <p class="small text-muted mb-3">
+            If you have published your Health360 workbook to Tableau Public, enter your public dashboard URL below to embed and explore it directly inside this web application.
+        </p>
+
+        <div class="row g-2 mb-4">
+            <div class="col-md-9">
+                <input type="url" id="tableauUrlInput" class="form-control form-control-sm" placeholder="https://public.tableau.com/views/Health360Analysis/SmartHealthcareDashboard" value="">
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-sm btn-outline-primary w-100" onclick="loadTableauEmbed()">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Load Embed
+                </button>
+            </div>
+        </div>
+
+        <!-- Embed Container / Fallback Simulation -->
+        <div id="tableauEmbedContainer" class="border rounded p-4 text-center bg-light" style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <i class="bi bi-easel2 text-secondary display-3 mb-3"></i>
+            <h5 class="fw-bold text-dark">Tableau Embed Simulation Mode Active</h5>
+            <p class="text-muted small max-w-600 mb-3" style="max-width: 600px;">
+                You can explore our 100% faithful native interactive 5-scene story right now in the web application, or connect your Tableau Desktop workbook following the 4-step workflow below.
+            </p>
+            <a href="{{ url_for('story') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-play-circle-fill me-1"></i> Launch Interactive Data Story Player
+            </a>
+        </div>
+    </div>
+
+    <!-- STEP-BY-STEP TABLEAU IMPLEMENTATION GUIDE -->
+    <div class="card border-0 shadow-sm p-4 bg-white mb-4">
+        <h4 class="h5 fw-bold text-dark mb-3">Step-by-Step Tableau Implementation Guide</h4>
+        
+        <div class="accordion" id="tableauGuideAccordion">
+            
+            <!-- Step 1: Connecting Data -->
+            <div class="accordion-item border-0 mb-3 rounded shadow-sm overflow-hidden">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        <span class="badge bg-primary me-2">Step 1</span> Connecting the Dataset in Tableau Desktop
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show">
+                    <div class="accordion-body bg-light small">
+                        <ol class="mb-0 ps-3">
+                            <li>Download the cleaned file: <code>data/tableau_healthcare_dataset.csv</code>.</li>
+                            <li>Launch <strong>Tableau Desktop</strong> or <strong>Tableau Public Desktop</strong>.</li>
+                            <li>Under <em>Connect</em>, select <strong>Text File</strong> and choose <code>tableau_healthcare_dataset.csv</code>.</li>
+                            <li>Verify that all 17 fields load properly with correct data types: <code>Age</code> (Whole Number), <code>Blood_Pressure</code> (Decimal Number), <code>BMI</code> (Decimal Number), and categorical text fields.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Calculated Fields -->
+            <div class="accordion-item border-0 mb-3 rounded shadow-sm overflow-hidden">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        <span class="badge bg-primary me-2">Step 2</span> Calculated Fields in Tableau (Formulas from PDF)
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse">
+                    <div class="accordion-body bg-light small">
+                        <p>Although our dataset includes pre-calculated fields, you can also author them inside Tableau using Tableau's calculated field editor (as illustrated on page 37 of the PDF):</p>
+                        <div class="bg-dark text-light p-3 rounded font-monospace mb-2" style="font-size: 0.78rem;">
+// Tableau Calculation: [Age Group]<br>
+IF [Age] &lt;= 30 THEN "Teenager"<br>
+ELSEIF [Age] &lt;= 40 THEN "Young Adult"<br>
+ELSEIF [Age] &lt;= 50 THEN "Adult"<br>
+ELSEIF [Age] &lt;= 60 THEN "Middle Age"<br>
+ELSEIF [Age] &lt;= 70 THEN "Senior"<br>
+ELSE "Old"<br>
+END
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Building 4 Dashboards -->
+            <div class="accordion-item border-0 mb-3 rounded shadow-sm overflow-hidden">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        <span class="badge bg-primary me-2">Step 3</span> Constructing the 4 Required Dashboards
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse">
+                    <div class="accordion-body bg-light small">
+                        <ul class="mb-0 ps-3">
+                            <li><strong>Dashboard 1 (Healthcare Overview):</strong> Combine KPI cards, Exercise Level Donut, Blood Pressure Bar Chart, and Substance Use grouped bar chart.</li>
+                            <li><strong>Dashboard 2 (Disease Analysis):</strong> Combine BMI vs Heart Disease Rate, Heart Disease vs Diabetes, and the BMI × Exercise Level Heatmap.</li>
+                            <li><strong>Dashboard 3 (Lifestyle Analysis):</strong> Combine Exercise distribution, Smoking/Alcohol consumption across age groups, and Age Group by Fatigue.</li>
+                            <li><strong>Dashboard 4 (Patient Demographics):</strong> Combine Age Group Pie Chart, BMI Tier bar chart, and Gender breakdowns.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Story & Publishing -->
+            <div class="accordion-item border-0 mb-3 rounded shadow-sm overflow-hidden">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        <span class="badge bg-primary me-2">Step 4</span> Creating the Story &amp; Publishing to Tableau Public
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse">
+                    <div class="accordion-body bg-light small">
+                        <ol class="mb-0 ps-3">
+                            <li>Click <strong>New Story</strong> at the bottom of Tableau Desktop.</li>
+                            <li>Title the story: <code>Smart Healthcare Analytics: Patient Risk &amp; Lifestyle Insights</code>.</li>
+                            <li>Create 5 Story Points / Scenes:
+                                <ul>
+                                    <li>Point 1: Patient Distribution by Age Group</li>
+                                    <li>Point 2: Age Group Distribution by Fatigue Condition</li>
+                                    <li>Point 3: Exercise Level Distribution</li>
+                                    <li>Point 4: Average Blood Pressure Across Age Groups</li>
+                                    <li>Point 5: Heart Disease by BMI Category &amp; Exercise Level</li>
+                                </ul>
+                            </li>
+                            <li>Go to <strong>File &gt; Save to Tableau Public</strong>.</li>
+                            <li>Log in with your Tableau Public credentials, enter a workbook title, and click <strong>Save</strong>.</li>
+                            <li>Copy the resulting Public URL and paste it in the field above to integrate it into Health360!</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function loadTableauEmbed() {
+        const url = document.getElementById('tableauUrlInput').value.trim();
+        const container = document.getElementById('tableauEmbedContainer');
+        if (!url) {
+            alert('Please enter a valid Tableau Public workbook or dashboard URL.');
+            return;
+        }
+
+        // Render iframe or Tableau JS API
+        container.innerHTML = `
+            <div class="w-100" style="height: 650px;">
+                <iframe src="${url}?:showVizHome=no&:embed=true" 
+                        width="100%" height="100%" frameborder="0" allowfullscreen>
+                </iframe>
+            </div>
+        `;
+    }
+</script>
+{% endblock %}

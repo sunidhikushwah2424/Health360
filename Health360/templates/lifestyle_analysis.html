@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Lifestyle & Risk Factors Analysis – Health360{% endblock %}
+{% block page_title %}Lifestyle Dynamics & Behavioral Risk Factors{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">Lifestyle &amp; Risk Factors Analysis</h2>
+            <p class="text-muted mb-0 small">Evaluating the influence of physical activity, tobacco smoking, and alcohol intake on health outcomes.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                <i class="bi bi-bicycle me-1"></i> {{ kpis.exercise_active_pct }}% Active Lifestyle
+            </span>
+            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-2">
+                <i class="bi bi-slash-circle me-1"></i> {{ kpis.smoking_pct }}% Smokers
+            </span>
+        </div>
+    </div>
+
+    <!-- Lifestyle KPI Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #10b981;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Active Cohort</span>
+                    <i class="bi bi-bicycle text-success fs-3"></i>
+                </div>
+                <div class="kpi-value text-success">{{ kpis.exercise_active_count | number_format }}</div>
+                <div class="kpi-subtext">{{ kpis.exercise_active_pct }}% regular weekly exertion</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #f59e0b;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Sedentary Lifestyle</span>
+                    <i class="bi bi-person-wheelchair text-warning fs-3"></i>
+                </div>
+                <div class="kpi-value text-warning">{{ kpis.exercise_sedentary_count | number_format }}</div>
+                <div class="kpi-subtext">{{ kpis.exercise_sedentary_pct }}% physical inactivity</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #f43f5e;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Tobacco Smokers</span>
+                    <i class="bi bi-fire text-danger fs-3"></i>
+                </div>
+                <div class="kpi-value text-danger">{{ kpis.smoking_count | number_format }}</div>
+                <div class="kpi-subtext">{{ kpis.smoking_pct }}% active consumption</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card" style="--card-accent: #8b5cf6;">
+                <div class="kpi-header">
+                    <span class="kpi-title">Alcohol Consumers</span>
+                    <i class="bi bi-cup-straw text-purple fs-3"></i>
+                </div>
+                <div class="kpi-value" style="color: #8b5cf6;">{{ kpis.alcohol_count | number_format }}</div>
+                <div class="kpi-subtext">{{ kpis.alcohol_pct }}% regular intake</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1: Exercise Donut & Alcohol/Smoking by Age -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-pie-chart text-teal"></i> Exercise Level Distribution</h3>
+                    <span class="chart-card-badge">Chart #4 · Donut</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="lifestyle-exercise-donut" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-bar-chart-steps text-warning"></i> Alcohol and Smoking by Age Group</h3>
+                    <span class="chart-card-badge">Chart #3 · Grouped Bar</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="lifestyle-alcohol-smoking" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2: Age by Fatigue Condition & Lifestyle Risk Score Impact -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-battery-charging text-primary"></i> Age Group by Fatigue Condition</h3>
+                    <span class="chart-card-badge">Chart #9 · Horizontal Bar</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="lifestyle-age-fatigue" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-card-header">
+                    <h3 class="chart-card-title"><i class="bi bi-heartbreak text-danger"></i> Heart Disease Rate by Exercise Level</h3>
+                    <span class="chart-card-badge">Physical Activity Impact</span>
+                </div>
+                <div class="chart-card-body">
+                    <div id="lifestyle-ex-hd-bar" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const lifeCharts = {{ chart_json | safe }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const config = { responsive: true, displayModeBar: true, displaylogo: false };
+        if (lifeCharts.chart_exercise_donut) Plotly.react('lifestyle-exercise-donut', lifeCharts.chart_exercise_donut.data, lifeCharts.chart_exercise_donut.layout, config);
+        if (lifeCharts.chart_alcohol_smoking) Plotly.react('lifestyle-alcohol-smoking', lifeCharts.chart_alcohol_smoking.data, lifeCharts.chart_alcohol_smoking.layout, config);
+        if (lifeCharts.chart_age_fatigue) Plotly.react('lifestyle-age-fatigue', lifeCharts.chart_age_fatigue.data, lifeCharts.chart_age_fatigue.layout, config);
+        if (lifeCharts.ex_hd_bar) Plotly.react('lifestyle-ex-hd-bar', lifeCharts.ex_hd_bar.data, lifeCharts.ex_hd_bar.layout, config);
+    });
+</script>
+{% endblock %}

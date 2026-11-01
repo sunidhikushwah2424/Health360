@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}About Health360 – Architecture & Methodology{% endblock %}
+{% block page_title %}About Health360 & Project Architecture{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1 text-dark fw-bold">About Health360 Healthcare Analytics</h2>
+            <p class="text-muted mb-0 small">
+                Architecture, clinical data dictionary, development workflow, and educational scope.
+            </p>
+        </div>
+        <div>
+            <span class="badge bg-primary px-3 py-2">
+                <i class="bi bi-mortarboard-fill me-1"></i> University Portfolio Project
+            </span>
+        </div>
+    </div>
+
+    <!-- Project Overview Card -->
+    <div class="card border-0 shadow-sm p-4 bg-white mb-4">
+        <h4 class="h5 fw-bold text-dark mb-3">1. Executive Summary &amp; Problem Statement</h4>
+        <p class="text-secondary small mb-3">
+            <strong>Health360: Comprehensive Healthcare Risk &amp; Disease Analysis</strong> is an interactive web-based healthcare intelligence platform. Modern healthcare systems face mounting challenges in synthesizing heterogeneous patient attributes—spanning demographics, anthropometrics, lifestyle habits, and clinical vitals—into actionable risk patterns. 
+        </p>
+        <p class="text-secondary small mb-3">
+            Health360 resolves this by integrating data processing (Pandas/NumPy), interactive browser-based visualization (Plotly/Bootstrap 5), and enterprise business intelligence (Tableau Desktop/Public) into an integrated analytical application.
+        </p>
+        <div class="alert alert-warning border-0 small mb-0 d-flex align-items-center gap-2">
+            <i class="bi bi-shield-lock-fill fs-5 text-warning"></i>
+            <span><strong>Strict Educational Disclaimer:</strong> Health360 is designed strictly for epidemiological exploration and educational instruction. It does not perform clinical diagnosis, and statistical correlations must never be construed as direct causal proof.</span>
+        </div>
+    </div>
+
+    <!-- Technology Stack Card -->
+    <div class="card border-0 shadow-sm p-4 bg-white mb-4">
+        <h4 class="h5 fw-bold text-dark mb-3">2. Enterprise Technology Stack</h4>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100 bg-light">
+                    <div class="fw-bold text-primary mb-1"><i class="bi bi-filetype-py me-1"></i> Python Backend</div>
+                    <div class="small text-muted">Python 3.14 with Flask 3.1 web framework, REST API endpoints, and dynamic route orchestration.</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100 bg-light">
+                    <div class="fw-bold text-teal mb-1"><i class="bi bi-table me-1"></i> Data Processing</div>
+                    <div class="small text-muted">Pandas 3.1 and NumPy 2.5 for vector operations, feature engineering, and demographic binning.</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100 bg-light">
+                    <div class="fw-bold text-warning mb-1"><i class="bi bi-graph-up-arrow me-1"></i> Visualizations</div>
+                    <div class="small text-muted">Plotly 7.1 engine with responsive, theme-consistent SVG/WebGL canvas rendering and interactive tooltips.</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100 bg-light">
+                    <div class="fw-bold text-danger mb-1"><i class="bi bi-easel2 me-1"></i> Business Intelligence</div>
+                    <div class="small text-muted">Tableau-ready schemas, multi-scene narrative presentation, and Tableau Public embedding integration.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clinical Data Dictionary Card -->
+    <div class="card border-0 shadow-sm p-4 bg-white mb-4">
+        <h4 class="h5 fw-bold text-dark mb-3">3. Clinical Data Dictionary (17 Ingested Fields)</h4>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle small mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Type</th>
+                        <th>Range / Domain</th>
+                        <th>Clinical Significance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Patient_ID</code></td>
+                        <td>String</td>
+                        <td>PID-10001 to PID-15000</td>
+                        <td>Unique synthetic identifier ensuring de-identification.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Age</code></td>
+                        <td>Integer</td>
+                        <td>18 – 85 years</td>
+                        <td>Chronological age, basis for the 6 calculated life-stage groups.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Gender</code></td>
+                        <td>Categorical</td>
+                        <td>Male, Female</td>
+                        <td>Demographic stratification factor.</td>
+                    </tr>
+                    <tr>
+                        <td><code>BMI</code></td>
+                        <td>Float</td>
+                        <td>15.2 – 44.8 kg/m²</td>
+                        <td>Body Mass Index; categorized into Underweight, Normal, Overweight, Obese.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Exercise_Level</code></td>
+                        <td>Categorical</td>
+                        <td>Active, Moderate, Sedentary</td>
+                        <td>Self-reported habitual weekly cardiovascular physical activity.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Smoking_Habits</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Active tobacco smoke exposure.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Alcohol_Consumption</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Regular consumption of alcoholic beverages.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Blood_Pressure</code></td>
+                        <td>Float</td>
+                        <td>98.0 – 185.0 mmHg</td>
+                        <td>Resting systolic blood pressure measurement.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Cholesterol</code></td>
+                        <td>Integer</td>
+                        <td>120 – 320 mg/dL</td>
+                        <td>Total serum cholesterol.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Glucose_Levels</code></td>
+                        <td>Integer</td>
+                        <td>65 – 275 mg/dL</td>
+                        <td>Fasting blood glucose concentration.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Fatigue</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Subjective reporting of persistent unrefreshing exhaustion.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Chest_Pain</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Reported thoracic or anginal discomfort.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Dizziness</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Orthostatic or generalized vertiginous episodes.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Heart_Disease</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Documented history of coronary artery disease or cardiac event.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Diabetes</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Confirmed diagnosis of Type 2 Diabetes Mellitus.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Stroke_History</code></td>
+                        <td>Binary</td>
+                        <td>Yes, No</td>
+                        <td>Prior ischemic or hemorrhagic cerebrovascular accident.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Overall_Health_Risk_Score</code></td>
+                        <td>Float</td>
+                        <td>10.0 – 98.0</td>
+                        <td>Multivariate composite risk index weighting vitals, chronic illnesses, and habits.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
